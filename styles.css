@@ -1,11 +1,9 @@
-/* 1. CSS Variables & Reset */
+/* 1. Variables & Reset */
 :root{
   --bg: #0d1117;
-  --glass: rgba(255,255,255,.08);
-  --glass-border: rgba(255,255,255,.12);
+  --surface: #161b22;          /* solid fallback */
   --accent: #58a6ff;
   --text: #c9d1d9;
-  --shadow: 0 8px 32px rgba(0,0,0,.37);
   --radius: 12px;
   --font: 'Inter', system-ui, sans-serif;
 }
@@ -17,92 +15,41 @@ body{
   color:var(--text);
   line-height:1.6;
   min-height:100vh;
-  overflow-x:hidden;
 }
 
-/* 2. Animated Gradient Background */
-body::before{
-  content:'';
-  position:fixed;
-  inset:0;
-  z-index:-1;
-  background:linear-gradient(-45deg,#0d1117,#161b22,#21262d,#30363d);
-  background-size:400% 400%;
-  animation:bgMove 15s ease infinite;
-}
-@keyframes bgMove{
-  0%{background-position:0% 50%}
-  50%{background-position:100% 50%}
-  100%{background-position:0% 50%}
+/* 2. Static gradient instead of animated */
+body{
+  background: linear-gradient(135deg, #0d1117 0%, #21262d 100%);
 }
 
-/* 3. Navbar */
-nav{
-  position:fixed;top:0;left:0;right:0;
-  backdrop-filter:blur(10px);
-  background:var(--glass);
-  border-bottom:1px solid var(--glass-border);
-  z-index:100;
-}
-nav .container{
-  max-width:900px;
-  margin:auto;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  padding:.75rem 1.2rem;
-}
-.logo{
-  font-weight:700;
-  font-size:1.25rem;
-  color:var(--accent);
-}
-nav ul{list-style:none;display:flex;gap:1.5rem}
-nav a{color:var(--text);text-decoration:none;font-weight:500;transition:.2s}
-nav a:hover{color:var(--accent)}
-
-/* 4. Sections */
-section{padding:6rem 1.2rem 4rem}
-.container{max-width:900px;margin:auto}
-
-/* 5. Hero */
-#hero{text-align:center;padding:8rem 1.2rem 4rem}
-#hero h1{font-size:clamp(2rem,5vw,3.2rem);margin-bottom:.5rem}
-#hero .accent{color:var(--accent)}
-#hero p{max-width:450px;margin:.5rem auto 1.5rem;color:var(--text);opacity:.8}
-
-/* 6. Glass Cards */
+/* 3. Solid cards (no blur) but keep glass colors */
 section:not(#hero){
   margin:2rem auto;
   border-radius:var(--radius);
-  background:var(--glass);
-  border:1px solid var(--glass-border);
-  backdrop-filter:blur(12px);
-  box-shadow:var(--shadow);
+  background:var(--surface);
   padding:2rem;
+  box-shadow:0 4px 16px rgba(0,0,0,.3);
 }
+
+/* 4. Everything else unchanged */
+nav{position:fixed;top:0;left:0;right:0;background:var(--surface);z-index:100}
+nav .container{max-width:900px;margin:auto;display:flex;align-items:center;justify-content:space-between;padding:.75rem 1.2rem}
+.logo{font-weight:700;font-size:1.25rem;color:var(--accent)}
+nav ul{list-style:none;display:flex;gap:1.5rem}
+nav a{color:var(--text);text-decoration:none;font-weight:500}
+nav a:hover{color:var(--accent)}
+section{padding:6rem 1.2rem 4rem}
+.container{max-width:900px;margin:auto}
+#hero{text-align:center;padding:8rem 1.2rem 4rem}
+#hero h1{font-size:clamp(2rem,5vw,3.2rem);margin-bottom:.5rem}
+#hero .accent{color:var(--accent)}
+#hero p{max-width:450px;margin:.5rem auto 1.5rem;opacity:.8}
 h2{color:var(--accent);margin-bottom:.75rem;font-weight:600}
-ul{list-style:none}
-li{margin:.25rem 0}
-a{color:var(--accent);text-decoration:none}
-a:hover{text-decoration:underline}
-
-/* 7. Buttons */
-.btn{
-  display:inline-block;
-  background:var(--accent);
-  color:#0d1117;
-  padding:.6rem 1.4rem;
-  border-radius:var(--radius);
-  font-weight:600;
-  transition:.2s;
-}
-.btn:hover{filter:brightness(1.15);transform:translateY(-2px)}
-
-/* 8. Footer */
-footer{text-align:center;padding:2rem 1rem;color:var(--text);opacity:.6;font-size:.875rem}
-
-/* 9. Responsive tweaks */
+ul{list-style:none}li{margin:.25rem 0}
+a{color:var(--accent)}
+.btn{display:inline-block;background:var(--accent);color:#0d1117;padding:.6rem 1.4rem;border-radius:var(--radius);font-weight:600;transition:.2s}
+.btn:hover{filter:brightness(1.15)}
+footer{text-align:center;padding:2rem 1rem;opacity:.6;font-size:.875rem}
 @media(max-width:600px){
   nav .container{padding:.6rem 1rem}
   section:not(#hero){margin:1rem .5rem}
