@@ -1,56 +1,104 @@
-/* 1. Variables & Reset */
+/* 1. Tokens & Reset */
 :root{
-  --bg: #0d1117;
-  --surface: #161b22;          /* solid fallback */
-  --accent: #58a6ff;
-  --text: #c9d1d9;
-  --radius: 12px;
-  --font: 'Inter', system-ui, sans-serif;
+  --bg:#0d0d0f;
+  --surface:#111215;
+  --accent:#00f5ff;
+  --text:#e4e4e7;
+  --muted:#71717a;
+  --radius:14px;
+  --maxw:760px;
+  --glow:0 0 20px rgba(0,245,255,.35);
+  font-family:'Inter',system-ui,sans-serif;
 }
-*{box-sizing:border-box;margin:0;padding:0}
+*{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
-body{
-  font-family:var(--font);
-  background:var(--bg);
-  color:var(--text);
-  line-height:1.6;
-  min-height:100vh;
+body{background:var(--bg);color:var(--text);line-height:1.6}
+
+/* 2. Animated gradient background (GPU-friendly) */
+body::before{
+  content:'';
+  position:fixed;
+  inset:0;
+  z-index:-1;
+  background:radial-gradient(ellipse at top, #1e293b 0%, var(--bg) 70%);
+  animation:bgShift 20s ease-in-out infinite alternate;
+  transform:translateZ(0); /* promote to own layer */
+}
+@keyframes bgShift{
+  0%  {background-position:0% 0%}
+  100%{background-position:100% 100%}
 }
 
-/* 2. Static gradient instead of animated */
-body{
-  background: linear-gradient(135deg, #0d1117 0%, #21262d 100%);
-}
+/* 3. Layout shell */
+.container{max-width:var(--maxw);margin:auto;padding:0 1.2rem}
+section{padding:4rem 0}
 
-/* 3. Solid cards (no blur) but keep glass colors */
-section:not(#hero){
-  margin:2rem auto;
-  border-radius:var(--radius);
-  background:var(--surface);
-  padding:2rem;
-  box-shadow:0 4px 16px rgba(0,0,0,.3);
+/* 4. Navbar */
+nav{
+  position:fixed;top:0;left:0;right:0;
+  background:rgba(17,18,21,.65);
+  backdrop-filter:blur(6px);
+  z-index:100;
 }
-
-/* 4. Everything else unchanged */
-nav{position:fixed;top:0;left:0;right:0;background:var(--surface);z-index:100}
-nav .container{max-width:900px;margin:auto;display:flex;align-items:center;justify-content:space-between;padding:.75rem 1.2rem}
-.logo{font-weight:700;font-size:1.25rem;color:var(--accent)}
-nav ul{list-style:none;display:flex;gap:1.5rem}
-nav a{color:var(--text);text-decoration:none;font-weight:500}
+nav .container{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:1rem 1.2rem;
+}
+.logo{font-weight:700;font-size:1.3rem;color:var(--accent)}
+nav ul{list-style:none;display:flex;gap:1.4rem}
+nav a{color:var(--text);text-decoration:none;font-weight:500;transition:.2s}
 nav a:hover{color:var(--accent)}
-section{padding:6rem 1.2rem 4rem}
-.container{max-width:900px;margin:auto}
-#hero{text-align:center;padding:8rem 1.2rem 4rem}
-#hero h1{font-size:clamp(2rem,5vw,3.2rem);margin-bottom:.5rem}
-#hero .accent{color:var(--accent)}
-#hero p{max-width:450px;margin:.5rem auto 1.5rem;opacity:.8}
-h2{color:var(--accent);margin-bottom:.75rem;font-weight:600}
-ul{list-style:none}li{margin:.25rem 0}
-a{color:var(--accent)}
-.btn{display:inline-block;background:var(--accent);color:#0d1117;padding:.6rem 1.4rem;border-radius:var(--radius);font-weight:600;transition:.2s}
-.btn:hover{filter:brightness(1.15)}
-footer{text-align:center;padding:2rem 1rem;opacity:.6;font-size:.875rem}
+
+/* 5. Hero (centered, larger type) */
+#hero{
+  text-align:center;
+  padding:8rem 1.2rem 5rem;
+  animation:fadeInUp 1s ease-out;
+}
+@keyframes fadeInUp{
+  from{opacity:0;transform:translateY(40px)}
+  to  {opacity:1;transform:translateY(0)}
+}
+#hero h1{font-size:clamp(2.2rem,5vw,3.6rem);margin-bottom:.5rem}
+#hero .accent{color:var(--accent);text-shadow:0 0 10px rgba(0,245,255,.6)}
+#hero p{max-width:480px;margin:.8rem auto 2rem;color:var(--muted)}
+
+/* 6. Buttons */
+.btn{
+  display:inline-block;
+  background:linear-gradient(135deg,var(--accent),#0099ff);
+  color:var(--bg);
+  padding:.7rem 1.6rem;
+  border-radius:var(--radius);
+  font-weight:600;
+  box-shadow:var(--glow);
+  transition:.3s;
+}
+.btn:hover{filter:brightness(1.2);transform:translateY(-2px)}
+.btn.secondary{
+  background:transparent;
+  border:1px solid var(--accent);
+  color:var(--accent);
+  box-shadow:none;
+}
+
+/* 7. Cards */
+.card{
+  background:var(--surface);
+  border:1px solid #23262d;
+  border-radius:var(--radius);
+  padding:2rem;
+  margin-bottom:1.5rem;
+  box-shadow:0 4px 24px rgba(0,0,0,.4);
+  transition:.3s;
+}
+.card:hover{transform:translateY(-4px);box-shadow:0 8px 32px rgba(0,0,0,.6)}
+
+/* 8. Footer */
+footer{text-align:center;padding:2rem 1rem;color:var(--muted);font-size:.875rem}
+
+/* 9. Responsive */
 @media(max-width:600px){
-  nav .container{padding:.6rem 1rem}
-  section:not(#hero){margin:1rem .5rem}
+  nav .container{padding:.8rem 1rem}
+  section{padding:3rem 0}
 }
